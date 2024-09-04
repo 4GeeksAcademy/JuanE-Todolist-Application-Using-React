@@ -1,26 +1,49 @@
-import React from "react";
+import React, { useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-//include images into your bundle
-import rigoImage from "../../img/rigo-baby.jpg";
+function TodoList() {
+  const [tasks, setTasks] = useState([]);
 
-//create your first component
-const Home = () => {
-	return (
-		<div className="text-center">
-			<h1 className="text-center mt-5">Hello Rigo!</h1>
-			<p>
-				<img src={rigoImage} />
-			</p>
-			<a href="#" className="btn btn-success">
-				If you see this green button... bootstrap is working...
-			</a>
-			<p>
-				Made by{" "}
-				<a href="http://www.4geeksacademy.com">4Geeks Academy</a>, with
-				love!
-			</p>
-		</div>
-	);
-};
+  const addTask = (newTask) => {
+    setTasks([...tasks, newTask]);
+  };
 
-export default Home;
+  const removeTask = (index) => {
+    const updatedTasks = [...tasks];
+    updatedTasks.splice(index, 1);
+    setTasks(updatedTasks);
+  };
+
+  return (
+    <>
+      <div className="container">
+        <h1>Todos</h1>
+        <input
+          type="text"
+          placeholder="What needs to be done?"
+          className="form-control"
+          onKeyUp={(e) => {
+            if (e.key === 'Enter' && e.target.value.trim() !== '') {
+              addTask(e.target.value.trim());
+              e.target.value = '';
+            }
+          }}
+        />
+        <ul className="list-group ">
+          {tasks.map((task, index) => (
+            <li key={index} className="list-group-item d-flex justify-content-between">
+              {task}
+              <button className='delete-button' onClick={(onClick) => removeTask(index)}>x</button>
+            </li>
+          ))}
+          <li id='footer' className="list-group-item"></li>
+        </ul>
+      </div>
+      <div className="element">
+        <p>{tasks.length} item(s) left</p>
+      </div>
+    </>
+  );
+}
+
+export default TodoList;
